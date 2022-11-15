@@ -1,23 +1,54 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
-$(function () {
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
-});
+// Create variable that will store the date
+var date = dayjs().format('dddd, MMMM D YYYY, h:mm:ss A');
+// Write the date to the page
+$("#day").html(date);
+// Create function that will only run when website loads
+$(document).ready(function () {
+    // Add event listener for when user clicks on save button
+    $(".saveBtn").on("click", function () {
+        // Create variables that target the entry of data
+        var content = $(this).siblings(".desc").val();
+        var moment = $(this).parent().attr("id");
+        // Store them in local storage
+        localStorage.setItem(moment, content);
+    })
+   // Get items from local storage
+   $("#period8 .desc").val(localStorage.getItem("period8"));
+   $("#period9 .desc").val(localStorage.getItem("period9"));
+   $("#period10 .desc").val(localStorage.getItem("period10"));
+   $("#period11 .desc").val(localStorage.getItem("period11"));
+   $("#period12 .desc").val(localStorage.getItem("period12"));
+   $("#period1 .desc").val(localStorage.getItem("period1"));
+   $("#period2 .desc").val(localStorage.getItem("period2"));
+   $("#period3 .desc").val(localStorage.getItem("period3"));
+   $("#period4 .desc").val(localStorage.getItem("period4"));
+   $("#period5 .desc").val(localStorage.getItem("period5"));
+    // Create function for changing background color
+    function runTime() {
+        // Assign hour of day to variable
+        var localTime = dayjs().format("H");
+        // Target the css class for each div
+        $(".block").each(function () {
+            var block = parseInt($(this).attr("id").split("period")[1]);
+            // Use if statement to assign the class
+            if (block < localTime) {
+                $(this).addClass("past");
+                $(this).removeClass("present");
+                $(this).removeClass("future");
+            }
+            else if (block == localTime) {
+                $(this).addClass("present");
+                $(this).removeClass("past");
+                $(this).removeClass("future");
+            }
+            else {
+                $(this).addClass("future");
+                $(this).removeClass("present");
+                $(this).removeClass("past");
+
+            }
+        })
+    }
+
+    runTime();
+})
